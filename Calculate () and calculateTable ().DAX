@@ -1,0 +1,55 @@
+CALCULATE vs CALCULATETABLE:
+
+1️CALCULATE → Returns a scalar (single value)
+------------------------------------------------------------
+Changes the filter context and then evaluates an expression.
+Expression must return a single value (number, text, date).
+
+Example:
+
+Total Sales =
+CALCULATE(
+    SUM(Sales[SalesAmount]),
+    Sales[Year] = 2024
+)
+👉 Returns one number → total sales for 2024.
+
+2️⃣ CALCULATETABLE → Returns a table
+--------------------------------------------------------------------
+Changes the filter context and returns a table of rows.
+Useful when you need to feed a table into another function (e.g., FILTER, SUMX, RANKX).
+
+Example:
+
+Sales Table 2024 =
+CALCULATETABLE(
+    Sales,
+    Sales[Year] = 2024
+)
+ Returns a table of all rows where Year = 2024.
+
+Practical Comparison:
+----------------------
+------------------------
+Function	Returns	Example Use Case
+CALCULATE	Single value (scalar)	KPIs → Total Sales, Total Profit, Average Margin
+CALCULATETABLE	A table (multiple rows/columns)	Advanced functions → Top N products, Filtering a table, Ranking
+
+Example with Both:
+----------------------------------------------------------
+-- Using CALCULATE (scalar result)
+Total Sales 2024 =
+CALCULATE(SUM(Sales[SalesAmount]), Sales[Year] = 2024)
+
+-- Using CALCULATETABLE (table result)
+Top 5 Products 2024 =
+TOPN(
+    5,
+    CALCULATETABLE(Sales, Sales[Year] = 2024),
+    Sales[SalesAmount], DESC
+)
+
+👉 First formula gives one number (total sales 2024).
+👉 Second formula gives a table of top 5 products in 2024.
+
+👉 Second formula gives a table of top 5 products in 2024.
