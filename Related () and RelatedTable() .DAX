@@ -1,0 +1,57 @@
+📊 Retail Data Model
+We have these 3 tables:
+Products:
+  1.ProductID
+  2.ProductName
+  3.Category
+
+Sales:
+  1.SalesID
+  2.ProductID
+  3.Quantity
+
+SalesAmount:
+   1.Date
+   2.Customers
+   3.CustomerID
+   4.Name
+   5.Region
+
+🔹 Example 1: Using RELATED()
+------------------------------------------------------------------------------------------
+Business Question:
+👉 "In the Sales table, show which category each product belongs to."
+
+Since Sales → Products is a" many-to-one "relationship, we can pull the Category from Products into Sales.
+                           ------------------------
+Category = RELATED(Products[Category])
+
+✅ Now in the Sales table, each row will also show its Category (Electronics, Clothing, etc.).
+
+🔹 Example 2: Using RELATEDTABLE()
+---------------------------------------------------------------------------------------------
+Business Question:
+👉 "For each Product, how many sales transactions happened?"
+From Products table, we can pull all related rows from Sales (one-to-many).
+
+Sales Transactions = COUNTROWS(RELATEDTABLE(Sales))
+
+✅ This creates a column in Products showing how many sales rows exist for each product.
+
+🔹 Example 3: Combining with Measures
+-----------------------------------------------------------------------------------------------------
+Let’s calculate Total Sales per Product from the Products table:
+
+Total Sales = SUMX(RELATEDTABLE(Sales), Sales[SalesAmount])
+
+------------------------------------------------------
+------------------------------------------------------
+⚖️ When to use in Retail
+-------------------------------------------------------
+-------------------------------------------------------
+RELATED() → Use when enriching the Sales fact table with lookup attributes (e.g., Product Category, Customer Region).
+
+RELATEDTABLE() → Use when calculating from the lookup/dimension table by pulling 
+related fact rows (e.g., count sales per product, total revenue per customer).
+
+👉 This way, you can create one SQL example (performance test with aggregates vs window functions) and one DAX example (RELATED vs RELATEDTABLE in retail model) in your GitHub repo as a learning project.
