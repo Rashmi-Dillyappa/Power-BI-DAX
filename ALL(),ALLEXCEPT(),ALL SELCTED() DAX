@@ -1,0 +1,62 @@
+🔹 Scenarios
+1. ALL(Table)
+--------------------------------------------------------------------------------------
+Removes all filters from the table.
+Acts as if the table is completely unfiltered.
+
+Example:
+Total Sales = CALCULATE(SUM(Sales[SalesAmount]), ALL(Sales))
+👉 Returns sales across all customers, products, dates, even if the report has slicers.
+
+2. ALL(Column)
+-------------------------------------------------------------------------------------------
+Removes filters only from that column.
+Other filters still apply.
+
+Example:
+Sales % of Category =
+DIVIDE(
+    SUM(Sales[SalesAmount]),
+    CALCULATE(SUM(Sales[SalesAmount]), ALL(Sales[Category]))
+)
+
+👉 Numerator = sales for selected product,
+👉 Denominator = total sales of all products in that category, regardless of filter.
+
+3. Nested with ALLEXCEPT()
+-------------------------------------------------------------------------------------------------
+If you want to keep some filters and ignore others, you use ALLEXCEPT().
+
+Example:
+
+Customer Sales Rank =
+RANKX(
+    ALLEXCEPT(Sales, Sales[CustomerID]),
+    SUM(Sales[SalesAmount])
+)
+
+👉 Ignores all filters except CustomerID.
+
+
+ALLSELECTED() → Respect outer filters, ignore inner filters
+-------------------------------------------------------------------------------------------------------------
+Keeps slicer/page/report filters, but ignores filters applied at visual level (like categories in a bar chart).
+Useful for calculating % of total in visuals.
+
+Example:
+
+Sales % of Total =
+DIVIDE(
+    SUM(Sales[SalesAmount]),
+    CALCULATE(SUM(Sales[SalesAmount]), ALLSELECTED(Sales))
+)
+
+
+👉 If you slice data to 2024 only, denominator = total sales of 2024.
+👉 Inside a bar chart (Product A, B, C), numerator = product sales, denominator = total sales of selected year, not full dataset.
+
+
+
+
+
+It doesn’t literally “pull the full table from the database,” but it removes the filter context inside DAX calculations.
