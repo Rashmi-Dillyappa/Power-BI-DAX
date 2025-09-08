@@ -1,0 +1,21 @@
+Practical Customer 360 / RFM Examples
+------------------------------------------------------------------
+Recency Status :
+-------------------------------------------------
+RecencyStatus = 
+IF(Customer[Recency]<=30,"Active",
+   IF(Customer[Recency]<=90,"At Risk","Churn"))
+
+
+Monetary Default :
+------------------------------------------------
+TotalSpent = COALESCE(SUM(Sales[Amount]),0)
+
+
+Loyalty Category using SWITCH :
+-------------------------------------------------
+LoyaltySegment = SWITCH(TRUE(),
+   Customer[Frequency]>=20 && Customer[Monetary]>=5000,"Champion",
+   Customer[Frequency]>=10 && Customer[Monetary]>=2000,"Loyal",
+   Customer[Recency]>90,"At Risk",
+   "Others")
