@@ -1,0 +1,119 @@
+1 DATEADD() :
+-------------------------------------------------------------------------------------------------------
+Purpose: Shifts a date column by a specified number of intervals (days, months, quarters, years).
+Behavior: Respects the current filter context; returns only the dates within the filtered selection.
+
+Syntax:
+DATEADD(<dates>, <number_of_intervals>, <interval>)
+
+Example:
+Current selection: August 1–15, 2025
+
+Sales Last Month = CALCULATE(SUM(Sales[Amount]), DATEADD(Calendar[Date], -1, MONTH))
+
+Result: July 1–15, 2025 ✅ (same number of days as selected)
+
+Use Case: Useful for rolling comparisons or shifting dates without always taking the full month/quarter/year.
+-------------------------------------------------------------------------------------------------------------
+2️⃣ PARALLELPERIOD():
+-------------------------------------------------------------------------------------------------------
+Purpose: Shifts dates by months, quarters, or years, always returning the full period, ignoring partial selection.
+
+Syntax:
+PARALLELPERIOD(<dates>, <number_of_intervals>, <interval>)
+
+Example:
+Current selection: August 1–15, 2025
+
+Sales Last Month Parallel = CALCULATE(SUM(Sales[Amount]), PARALLELPERIOD(Calendar[Date], -1, MONTH))
+Result: July 1–31, 2025 ✅ (full previous month)
+
+Use Case: When you want full period comparisons not affected by partial selections.
+-------------------------------------------------------------------------------------------------------
+3️⃣ SAMEPERIODLASTYEAR():
+-------------------------------------------------------------------------------------------------------
+Purpose: Returns the exact same period from the previous year.
+
+Syntax:
+
+SAMEPERIODLASTYEAR(<dates>)
+
+Example:
+Current selection: August 1–15, 2025
+Sales Last Year = CALCULATE(SUM(Sales[Amount]), SAMEPERIODLASTYEAR(Calendar[Date]))
+Result: August 1–15, 2024 ✅ (exact same days last year)
+
+Why used: Ideal for Year-over-Year (YoY) comparisons because it exactly matches the current 
+period in the previous year, regardless of month length or partial selections.
+-------------------------------------------------------------------------------------------------------
+4️⃣ PREVIOUSMONTH() / PREVIOUSQUARTER() / PREVIOUSYEAR() :
+-------------------------------------------------------------------------------------------------------
+Purpose: Returns the full previous month, quarter, or year relative to the current filter.
+
+Syntax:
+
+PREVIOUSMONTH(<dates>)
+PREVIOUSQUARTER(<dates>)
+PREVIOUSYEAR(<dates>)
+
+Example:
+Current selection: August 1–15, 2025
+Sales Previous Month = CALCULATE(SUM(Sales[Amount]), PREVIOUSMONTH(Calendar[Date]))
+
+Result: July 1–31, 2025 ✅ (full previous month)
+
+Use Case: Perfect for MTD/QTD/YTD comparisons, when you always want the entire previous period, not just matching days.
+-------------------------------------------------------------------------------------------------------
+5️⃣ TOTALYTD(), TOTALMTD(), TOTALQTD()
+
+Purpose: Calculates Year-to-Date, Month-to-Date, Quarter-to-Date totals.
+
+Syntax:
+
+TOTALYTD(<expression>, <dates>[, <filter>])
+TOTALMTD(<expression>, <dates>[, <filter>])
+TOTALQTD(<expression>, <dates>[, <filter>])
+
+Example:
+Sales YTD = TOTALYTD(SUM(Sales[Amount]), Calendar[Date])
+
+Result: Sum of all sales from Jan 1–current date in filter.
+Use Case: Used in cumulative reporting for dashboards.
+-------------------------------------------------------------------------------------------------------
+6️⃣ DATESBETWEEN()
+-------------------------------------------------------------------------------------------------------
+Purpose: Returns dates between two specified dates.
+
+Syntax:
+DATESBETWEEN(<dates>, <start_date>, <end_date>)
+
+Example:
+
+Sales Custom Period = CALCULATE(SUM(Sales[Amount]), DATESBETWEEN(Calendar[Date], DATE(2025,1,1), DATE(2025,3,31)))
+
+Result: Sales from Jan 1–Mar 31, 2025
+
+Use Case: For custom period reporting, like fiscal periods.
+-------------------------------------------------------------------------------------------------------
+7️⃣ OPENBALANCE() / CLOSINGBALANCE() (Using DAX like OPENINGBALANCE and CLOSINGBALANCE in Power BI)
+-------------------------------------------------------------------------------------------------------
+Purpose: Returns first or last value of a measure in a period.
+
+Syntax Example:
+Closing Balance = CALCULATE(LASTNONBLANK(Sales[Amount], 1), DATESBETWEEN(Calendar[Date], MIN(Calendar[Date]), MAX(Calendar[Date])))
+
+Use Case: Balance reports for financials (opening/closing balances).
+-------------------------------------------------------------------------------------------------------
+8️⃣ RUNNING TOTAL / ROLLING AVERAGE
+
+Running Total Example:
+
+Running Total = CALCULATE(SUM(Sales[Amount]), FILTER(ALL(Calendar[Date]), Calendar[Date] <= MAX(Calendar[Date])))
+
+7-Day Rolling Average Example:
+
+7 Day Avg = CALCULATE(AVERAGE(Sales[Amount]), DATESINPERIOD(Calendar[Date], MAX(Calendar[Date]), -7, DAY))
+Use Case: Trend analysis, moving averages, cumulative insights.
+
+
+Use Case: Trend analysis, moving averages, cumulative insights.
