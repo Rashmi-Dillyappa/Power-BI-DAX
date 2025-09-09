@@ -1,0 +1,105 @@
+LOOKUPVALUE() Overview:
+--------------------------------------------------------------------
+Purpose: Returns the value of a column from another row in the same or related table, 
+based on one or more search conditions.
+
+It’s like a VLOOKUP in Excel.
+
+Syntax
+"LOOKUPVALUE(<result_columnName>, <search_columnName>, <search_value>[, <search_columnName>, <search_value>]…)"
+
+result_columnName: The column you want to return.
+search_columnName: The column where DAX looks for the value.
+search_value: The value to search for.
+
+You can add multiple search pairs for composite lookups.
+
+Example 1:  Simple Lookup
+--------------------------------------------------------------------
+You have 2 tables:
+
+Customer Table
+----------------
+CustomerID	CustomerName
+-------------------------
+1	            Rashmi
+2	             John
+3	             Priya
+
+Sales Table
+-------------------
+SalesID	  CustomerID	 Amount
+-----------------------------
+101	         1	         500
+102	         3	         700
+
+👉 You want to bring CustomerName into the Sales Table.
+--------------------------------------------------------------------     
+"Customer Name = LOOKUPVALUE(
+    Customer[CustomerName],   -- Result column
+    Customer[CustomerID],     -- Search column
+    Sales[CustomerID]         -- Search value
+)"
+
+--------------------------------------------------------------------
+Result:
+
+SalesID	CustomerID	Amount	CustomerName
+--------------------------------------------------------------------
+101	      1	       500	      Rashmi
+102	      3	       700	      Priya
+
+Example 2: Multiple Search Conditions
+--------------------------------------------------------------------
+You have a ProductPrice Table:
+
+ProductID	Region	Price
+P1	AUS	20
+P1	USA	25
+P2	AUS	15
+
+And a Sales Table:
+
+SaleID	ProductID	Region	Qty
+S1	P1	AUS	3
+S2	P1	USA	2
+
+👉 You want to fetch the correct Price into the Sales Table.
+--------------------------------------------------------------------
+"Price = LOOKUPVALUE(
+    ProductPrice[Price], 
+    ProductPrice[ProductID], Sales[ProductID],
+    ProductPrice[Region], Sales[Region]
+)"
+
+--------------------------------------------------------------------
+Result:
+
+SaleID	ProductID	Region	Qty	Price
+S1	P1	AUS	3	20
+S2	P1	USA	2	25
+
+
+🚨 Notes & Gotchas
+--------------------------------------------------------------------
+If multiple matches are found → DAX will throw an error.
+Example: If ProductID=1 has 2 rows with same Region, LOOKUPVALUE breaks.
+Solution → Ensure uniqueness or use aggregation functions (like MINX, MAXX).
+If no match → it returns blank.
+If your model already has a relationship, better to use RELATED() (faster & simpler).
+LOOKUPVALUE is often used when no relationship exists or you can’t create one.
+
+✅ When to Use LOOKUPVALUE()
+
+When you need to perform a lookup without creating a relationship in the model.
+To simulate Excel VLOOKUPs inside DAX.
+When doing conditional lookups with multiple columns (e.g., Product + Region).
+For creating calculated columns like "Customer Name" in the Sales table.
+
+👉 Quick rule:
+
+Use RELATED() when relationship exists.
+Use LOOKUPVALUE() when no relationship exists or you need a custom lookup with multiple conditions
+
+
+Use LOOKUPVALUE() when no relationship exists or you need a custom lookup with multiple conditio
