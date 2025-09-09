@@ -1,0 +1,64 @@
+Power BI – Calculated Column vs Measure vs Power Query
+---------------------------------------------------------------------------------------------------
+1. Storage & Calculation:
+---------------------------------------------------------------------------------------------------
+Calculated Column: Stored in the data model, increases file size. Calculated once during refresh.
+Measure: Not stored, only formula kept. Calculated on the fly when used in visuals.
+Power Query: Transformation done before loading into model (ETL).
+
+2. Filter Context Behavior:
+---------------------------------------------------------------------------------------------------
+Calculated Column: Ignores slicers/filters (values don’t change).
+Measure: Respects slicers/filters (dynamic values).
+Power Query: Static, fixed before load.
+
+3. Use Case Scenarios
+---------------------------------------------------------------------------------------------------
+Scenario 1 – Categorizing rows
+Need: Mark orders as “Big” if Amount > 250.
+Solution:
+-----------------------------------------------
+"Calculated Column →
+IsBig = IF(Sales[Amount] > 250, "Yes", "No")"
+
+Stored permanently, useful for slicers/filters.
+-----------------------------------------------
+Scenario 2 – Total Sales
+---------------------------------------------------------------------------------------------------
+Need: Show sales total by Customer, Region, or Month dynamically.
+Solution:
+
+Measure →
+
+Total Sales = SUM(Sales[Amount]
+Always recalculates based on filter context.
+-----------------------------------------------
+Scenario 3 – Splitting Date Column
+---------------------------------------------------------------------------------------------------
+Need: Extract Year, Month, Day for filtering.
+
+Solution:
+
+Power Query →
+Add “Year”, “Month” columns before loading → keeps model clean & optimized.
+
+4. Performance
+---------------------------------------------------------------------------------------------------
+Calculated Column: Heavy (stored values). Avoid unless necessary.
+Measure: Light (calculated only when needed). Best practice for KPIs.
+Power Query: Efficient for data prep, reduces model size.
+
+5. Golden Rule
+---------------------------------------------------------------------------------------------------
+Power Query → Data cleaning, transformations.
+Calculated Column → Row-level fixed logic needed inside model (e.g., classification, flags).
+Measure → Dynamic aggregations, KPIs, comparisons (best for visuals).
+
+💡 Tip for Interviews:
+
+If asked “Which is better?” → Say Measure (lightweight, dynamic).
+
+If asked “Why not always Measure?” → Some cases require row-level categorization → Calculated Column.
+If asked “Why not always Calculated Column?” → Large models will bloat → prefer Power Query for p
+
+If asked “Why not always Calculated Column?” → Large models will bloat → prefer Power Query for prep.
