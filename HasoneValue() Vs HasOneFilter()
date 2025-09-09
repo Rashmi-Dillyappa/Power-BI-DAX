@@ -1,0 +1,76 @@
+1.HASONEVALUE()
+
+Definition: Checks whether the column has been filtered down to exactly one distinct value.
+Returns: TRUE/FALSE.
+
+Syntax:
+HASONEVALUE(<columnName>)
+
+Example:
+
+Say you have a slicer for Product[Category] with 3 categories: Electronics, Furniture, Clothing.
+
+Slicer Selection	     HASONEVALUE(Product[Category])
+--------------------------------------------------------
+Nothing selected	           -    FALSE
+Electronics	                 -    TRUE
+Electronics + Furniture	     -    FALSE
+
+👉 Use Case: When you need to ensure only one distinct value is selected before calculating something.
+-------------------------------------------------------------
+Selected Category Sales = 
+IF(
+    HASONEVALUE(Product[Category]),
+    SUM(Sales[Amount]),
+    BLANK()
+)
+-------------------------------------------------------------
+
+This will only show sales if exactly 1 category is selected.
+
+2️. HASONEFILTER()
+
+Definition: Checks whether the column has a filter applied, regardless of whether it results in one or multiple values.
+Returns: TRUE/FALSE.
+
+Syntax:
+HASONEFILTER(<columnName>)
+
+Example:
+Using the same slicer for Product[Category]:
+
+Slicer Selection	          HASONEFILTER(Product[Category])
+----------------------------------------------------------------
+Nothing selected	                     FALSE
+Electronics	                           TRUE
+Electronics + Furniture              	 TRUE
+
+👉 Use Case: When you need to know if any filter at all is applied to the column, not just a single one.
+
+Check Filter = 
+IF(
+    HASONEFILTER(Product[Category]),
+    "Category is filtered",
+    "No filter on Category"
+)
+
+✅ Key Difference
+Function	What It Checks	Example Scenario
+HASONEVALUE()	Exactly one distinct value is left after filters	Validate slicer allows only 1 value (e.g., show customer details only if 1 customer is selected)
+HASONEFILTER()	If any filter is applied (1 or many)	Adjust calculation if the column is filtered at all (e.g., show breakdown only when category filter is applied)
+⚡ Real-World Scenario
+
+Imagine you’re building a Customer 360 dashboard:
+----------------------------------------------------------------------------------------------------------------------------------------
+You want to show customer profile details → you must ensure exactly one customer is selected → ✅ HASONEVALUE(Customer[CustomerID]).
+
+You want to show Sales by Category only if the user applied a filter on Category (doesn’t matter 1 or many) → ✅ HASONEFILTER(Product[Category]).
+
+👉 In short:
+----------------------------------------------------------------------------------------------------------------------------------------
+HASONEVALUE = strict → exactly one
+HASONEFILTER = loose → at least one filter applied
+
+
+
+HASONEFILTER = loose → at least one filter applied
