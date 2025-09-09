@@ -1,0 +1,42 @@
+CONCATENATEX() – DAX Function
+------------------------------------------------------------------------------------------------------
+Type: Text / Aggregation :
+--------------------------
+Purpose: Combines values from a column (or expression) into a single text string, with a separator.
+Scenario: Useful when you want to list all products bought by a customer in a single cell, or show all categories in a single line.
+
+Syntax
+" CONCATENATEX(<Table>, <Expression>, [Delimiter], [OrderBy_expression], [Order])"
+
+<Table> → The table or filtered table to iterate over
+<Expression> → Column or expression whose values to concatenate
+[Delimiter] → Optional. Separator between values (e.g., ", ")
+[OrderBy_expression] → Optional. Column to sort by before concatenation
+[Order] → Optional. ASC or DESC
+
+Example – Retail Scenario
+----------------------------
+Scenario: Show all products bought by each customer in a single string.
+
+CustomerProducts = 
+CONCATENATEX(
+    RELATEDTABLE(Sales),   -- Iterate over Sales table for each customer
+    Sales[ProductName],    -- Column to concatenate
+    ", ",                  -- Separator between products
+    Sales[OrderDate],      -- Optional: order by purchase date
+    ASC
+)
+
+
+Result Table:
+
+Customer	CustomerProducts
+Rash	Tea, Coffee, Biscuits
+John	Milk, Bread
+
+Key Notes :
+Works row-by-row when used in a calculated column.
+Can also be used in measures to show aggregated text dynamically.
+Allows ordering using OrderBy_expression – very handy for chronological or alphabetical lists.
+Unlike simple & operator, it works over tables, not just single rows.
+
