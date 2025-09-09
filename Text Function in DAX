@@ -1,0 +1,30 @@
+SEARCH vs FIND in DAX :
+---------------------------------------------------------------------------------------------------------
+Function	                    Case Sensitivity	            Description	Example
+---------------------------------------------------------------------------------------------------------
+SEARCH	                       Not case-sensitive	             Returns the starting position of a 
+                                                               substring within a text.	
+                                                               SEARCH("cat", "My Cat is cute") → 4
+FIND	                        Case-sensitive	                 Returns the starting position of a substring; 
+                                                               considers exact case.	
+                                                                FIND("Cat", "My Cat is cute") → 4
+                                                                FIND("cat", "My Cat is cute") → Error
+
+Scenario:
+--------------------------------
+SEARCH: When you don’t care about case, e.g., finding a word in product description.
+FIND: When exact case matters, e.g., searching for specific code or ID in text.
+
+SUBSTITUTE vs REPLACE in DAX
+----------------------------------------------------------------------------------------------------------
+Function	                     Description	                                             Example
+----------------------------------------------------------------------------------------------------------
+SUBSTITUTE	            Replaces all occurrences (or a specific occurrence)       SUBSTITUTE("Hello World", "World", "DAX") → "Hello DAX"
+                        of old text with new text.	                          
+REPLACE	               Replaces text based on position and length,                REPLACE("Hello World", 7, 5, "DAX") → "Hello DAX"
+                       not the actual text match.	   
+
+Scenario:
+---------------
+SUBSTITUTE: When you know the text to replace (e.g., correct a common typo in product names).
+REPLACE: When you know the exact position in the string to replace (e.g., changing part of a code or ID).
