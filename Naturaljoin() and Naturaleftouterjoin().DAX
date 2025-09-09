@@ -1,0 +1,50 @@
+1️⃣ GENERATE / GENERATEALL
+
+Type: Row-by-row evaluation, dynamic tables.
+-----------------------------------------------------------------------------------
+Key Points:
+
+Evaluates Table2 for each row of Table1.
+GENERATE: Keeps only rows where Table2 returns values (like inner join).
+GENERATEALL: Keeps all rows of Table1, even if Table2 is blank (like left outer join).
+
+Can use filtered or calculated tables for Table2.
+
+Example:
+
+-- GENERATE: Only customers with sales
+GENERATE(
+    Customers,
+    FILTER(Sales, Sales[CustomerID] = Customers[CustomerID])
+)
+
+-- GENERATEALL: Keep all customers, even without sales
+GENERATEALL(
+    Customers,
+    FILTER(Sales, Sales[CustomerID] = Customers[CustomerID])
+)
+
+
+Use Case: When you want per-row calculations for each parent row, with flexibility for dynamic filtering.
+
+2️⃣ NATURALINNERJOIN / NATURALLEFJOIN
+-----------------------------------------------------------------------------------
+Type: Column name-based, static table joins.
+
+Key Points:
+Joins tables based on columns with the same name.
+NATURALINNERJOIN: Keeps only matching rows (like inner join).
+NATURALLEFJOIN: Keeps all rows of the first table, fills blanks if no match (like left outer join).
+
+Works with static tables only, no row-by-row dynamic evaluation.
+
+Example:
+
+-- NATURALINNERJOIN: Only matching customers and sales
+NATURALINNERJOIN(Customers, Sales)
+
+-- NATURALLEFJOIN: Keep all customers, add sales if exists
+NATURALLEFJOIN(Customers, Sales)
+
+
+Use Case: When you want a classic SQL-style join on columns with the same name, simple and static.
