@@ -1,0 +1,63 @@
+Opening Balance (handling gaps):
+------------------------------------------------------
+OpeningBalance_Adjusted :=
+CALCULATE(
+    OPENINGBALANCE(Sales[Amount], 'Date'[Date]),
+    FILTER(
+        ALL('Date'),
+        'Date'[Date] <= MIN('Date'[Date])
+            && NOT(ISBLANK(Sales[Amount]))
+    )
+)
+
+------------------------------------------------------
+Or using LASTNONBLANKVALUE() explicitly:
+
+OpeningBalance_Adjusted2 :=
+CALCULATE(
+    SUM(Sales[Amount]),
+    LASTNONBLANKVALUE(
+        'Date'[Date],
+        CALCULATE(SUM(Sales[Amount]))
+    ),
+    FILTER(
+        ALL('Date'),
+        'Date'[Date] <= MIN('Date'[Date])
+    )
+)
+
+
+Closing Balance (handling gaps):
+------------------------------------------------------
+ClosingBalance_Adjusted :=
+CALCULATE(
+    CLOSINGBALANCE(Sales[Amount], 'Date'[Date]),
+    FILTER(
+        ALL('Date'),
+        'Date'[Date] <= MAX('Date'[Date])
+            && NOT(ISBLANK(Sales[Amount]))
+    )
+)
+
+
+Or with LASTNONBLANKVALUE():
+
+ClosingBalance_Adjusted2 :=
+CALCULATE(
+    SUM(Sales[Amount]),
+    LASTNONBLANKVALUE(
+        'Date'[Date],
+        CALCULATE(SUM(Sales[Amount]))
+    ),
+    FILTER(
+        ALL('Date'),
+        'Date'[Date] <= MAX('Date'[Date])
+    )
+)
+
+
+✅ Key Points:
+
+OpeningBalance() and ClosingBalance() automatically pick nearest non-blank if date is missing, but combining with LASTNONBLANKVALUE() gives more control.
+Works perfectly for periods with gaps or missing data.
+Always wrap in CALCULATE() to respect your filters/context.
