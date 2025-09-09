@@ -1,0 +1,14 @@
+CONTAINSSTRING, CONTAINSSTRINGEXACT, CONTAINSROW, CONTAINS → all return TRUE/FALSE, so you can directly use them in an IF() condition in DAX.
+DiscountFlag = IF(CONTAINSSTRING(Sales[ProductName], "Tea"), 1, 0)
+
+
+SEARCH / FIND → return position numbers, not TRUE/FALSE. If you want to use in IF(), you usually combine with ISERROR or >0 check:
+DiscountFlag = IF(ISERROR(SEARCH("Tea", Sales[ProductName])), 0, 1)
+
+
+LOOKUPVALUE → returns a value, not TRUE/FALSE, so you can’t directly use in IF unless you check for equality or existence:
+IsCustomerFromUSA = IF(LOOKUPVALUE(Customer[Country], Customer[ID], Sales[CustomerID]) = "USA", 1, 0)
+
+REPLACE / SUBSTITUTE → return text, used for transforming strings, not directly TRUE/FALSE. You can wrap with other logic if needed.
+
+✅ TL;DR: Only CONTAINS… functions give you TRUE/FALSE directly for IF conditions; others need extra checks.
