@@ -1,0 +1,48 @@
+RLS DAX Example: PATH + LOOKUPVALUE:
+
+Step 1: Path Column (in Employees table)
+------------------------------------------------------------------
+Path = PATH(Employees[EmployeeID], Employees[ManagerID])
+
+Creates a hierarchy path from top to each employee.
+
+Example:
+| EmployeeID | Path |
+|------------|-----------|
+| CEO (1) | 1 |
+| RegionalMgr(2) | 1|2 |
+| SalesMgr(3) | 1|2|3 |
+| SalesRep1(4)| 1|2|3|4 |
+| SalesRep2(5)| 1|2|3|5 |
+
+Step 2: Map logged-in user to EmployeeID
+------------------------------------------------------------------
+CurrentEmployee =
+LOOKUPVALUE(
+    Employees[EmployeeID],
+    Employees[Email],
+    USERPRINCIPALNAME()
+)
+
+
+Finds the EmployeeID of the logged-in user using their email.
+
+Step 3: Apply RLS Filter
+------------------------------------------------------------------
+PATHCONTAINS(Employees[Path], [CurrentEmployee])
+Returns TRUE for all employees in the logged-in user’s hierarchy.
+
+Examples of visibility:
+
+Logged-in User	        Visible Employees
+rep1@abc.com          SalesRep1
+salesmgr@abc.com      SalesMgr, SalesRep1, SalesRep2
+region@abc.com        RegionalMgr, SalesMgr, SalesReps
+ceo@abc.com          All employees
+
+Summary:
+------------------------------------------------------------------
+PATH = builds the full hierarchy chain.
+LOOKUPVALUE = identifies the logged-in user’s EmployeeID.
+PATHCONTAINS = dynamically gives managers access to all subordinates’ data while restricting regular employees to only their own.
+
