@@ -1,0 +1,86 @@
+Text / String DAX Functions
+1️⃣ CONCATENATE / CONCATENATEX
+-----------------------------------------------------
+Purpose: Combine text from columns or tables.
+
+Syntax:
+
+CONCATENATE(<Text1>, <Text2>)
+CONCATENATEX(<Table>, <Expression>, <Delimiter>)
+Example:
+
+Full Name = CONCATENATE(Employee[FirstName], " " & Employee[LastName])
+FullList = CONCATENATEX(Customer, Customer[Name], ", ")
+
+2️⃣ REPT
+-----------------------------------------------------
+Purpose: Repeat a text string N times.
+
+Syntax:
+REPT(<Text>, <NumberOfTimes>)
+
+Example:
+Sales Bar = REPT("⭐", DIVIDE(SUM(Sales[SalesAmount]), 1000, 0))
+
+3️⃣ UNICHAR
+-----------------------------------------------------
+Purpose: Returns the Unicode character corresponding to a number.
+
+Syntax:
+UNICHAR(<Number>)
+
+Example:
+
+Check Mark = UNICHAR(10003)  // ✔
+
+4️⃣ SEARCH / FIND
+-----------------------------------------------------
+Purpose: Find the position of a substring.
+
+Syntax:
+
+SEARCH(<FindText>, <WithinText>, [StartPosition], [NotFoundValue])
+FIND(<FindText>, <WithinText>, [StartPosition], [NotFoundValue])
+
+Difference: SEARCH is case-insensitive, FIND is case-sensitive.
+
+Example:
+
+Position = SEARCH("Pro", Product[Name], 1, 0)
+
+5️⃣ SUBSTITUTE / REPLACE
+-----------------------------------------------------
+Purpose: Replace text.
+
+Syntax:
+
+SUBSTITUTE(<Text>, <OldText>, <NewText>, [InstanceNumber])
+REPLACE(<OldText>, <StartPosition>, <NumberOfChars>, <NewText>)
+
+
+Example:
+ReplaceBrand = SUBSTITUTE(Product[Name], "Inc", "Ltd)
+
+6️⃣ CONTAINSSTRING / CONTAINSSTRINGEXACT / CONTAINSROW / CONTAINS
+-----------------------------------------------------
+Purpose: Check if text/value exists in table or string.
+
+Examples:
+
+// Case-insensitive
+ContainsPro = CONTAINSSTRING(Product[Name], "Pro")
+
+// Case-sensitive
+ContainsExact = CONTAINSSTRINGEXACT(Product[Name], "Pro")
+
+// Row-level check
+ContainsRowCheck = CONTAINSROW(Customer, "John", "Doe")
+
+// Table contains check
+TableCheck = CONTAINS(Customer, Customer[Name], "John")
+
+
+✅ Usage Notes:
+
+REPT() is unique because it creates repeated text patterns, often used for mini bars/visual indicators.
+SEARCH/FIND give positions, SUBSTITUTE/REPLACE allow text replacement, and CONTAINS* are for condition checks.
