@@ -1,0 +1,39 @@
+FILTER()
+------------------------------------------------------------------------------------------------------------------------------
+Type: Table function
+Purpose: Returns a table of rows that meet a specific condition.
+Behavior: Creates a new table; does not modify the filter context of the current calculation unless wrapped in CALCULATE().
+Usage scenario: When you want to apply a condition to a table and use it in a measure or another table calculation.
+
+Syntax:
+FILTER(<table>, <condition>)
+
+Example:
+HighSalesOrders = FILTER(Sales, Sales[TotalAmount] > 1000)
+Returns a table of sales orders where TotalAmount > 1000.
+
+With CALCULATE:
+TotalHighSales = CALCULATE(SUM(Sales[TotalAmount]), FILTER(Sales, Sales[TotalAmount] > 1000))
+Here, FILTER modifies the filter context for this calculation.
+
+KEEPFILTERS() :
+------------------------------------------------------------------------------------------------------------------------------
+Type: Modifier function
+Purpose: Tells DAX not to override existing filters, but add to them.
+Behavior: Normally, CALCULATE() replaces filters on a column/table. Using KEEPFILTERS() ensures your new filter adds on top of the existing ones instead of replacing them.
+Usage scenario: When you want to refine an already filtered context without removing previous filters.
+
+Syntax:
+CALCULATE(<expression>, KEEPFILTERS(<table/condition>))
+
+
+Example:
+TotalHighTeaSales = CALCULATE(
+    SUM(Sales[TotalAmount]), 
+    KEEPFILTERS(FILTER(Sales, Sales[ProductCategory] = "Tea"))
+)
+
+If the report page already filters for Region = "East", this keeps the region filter while also filtering for ProductCategory = "Tea".
+
+Use FILTER() to create a table or restrict rows in CALCULATE (can replace filters).
+Use KEEPFILTERS() to refine/add conditions without removing existing filters.
