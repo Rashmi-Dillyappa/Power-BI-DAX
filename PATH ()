@@ -1,0 +1,37 @@
+PATH & Parent-Child Functions (DAX) – Brief Note
+-------------------------------------------------------------------------
+What is PATH?
+PATH(Child, Parent) shows the hierarchy path from top parent to child.
+Returns a text string like "1|2|4|5" (IDs separated by |).
+
+Key Functions
+-------------------------------------------------------------------------
+PATH() → Full chain of IDs (lineage).
+Example: CEO → VP → Manager → Staff → "1|2|4|5".
+PATHLENGTH() → How many levels.
+Example: "1|2|4|5" → 4 levels.
+
+PATHITEM() → Pick a specific level from PATH.
+-------------------------------------------------------------------------
+Example: PATHITEM("1|2|4|5", 2) → 2 (VP).
+
+PATHITEMREVERSE() → Pick from bottom.
+-------------------------------------------------------------------------
+Example: PATHITEMREVERSE("1|2|4|5", 1) → 5 (Staff).
+
+PATHCONTAINS() → Check if ID exists in path.
+-------------------------------------------------------------------------
+Example: PATHCONTAINS("1|2|4|5", 2) → TRUE.
+
+Use Cases
+
+Org Chart: CEO → VP → Manager → Staff.
+Product Categories: Category → Subcategory → Product.
+Geography: Country → State → City.
+
+Shortcut to remember:
+-------------------------------------------------------------------------
+PATH = lineage,
+PATHLENGTH = depth,
+PATHITEM = pick a level,
+PATHCONTAINS = check membership.
