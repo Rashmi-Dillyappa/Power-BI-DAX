@@ -1,0 +1,71 @@
+RANKX
+-----------------------------------------------------------------------------------------------------------
+Purpose: Returns the rank of an item in a table based on a measure. Useful for labeling or sorting.
+
+Syntax:
+"
+RANKX(
+    <table>,        -- Table to rank
+    <expression>,   -- Measure or column to rank by
+    [<value>],      -- Optional, default is current row
+    [<order>],      -- ASC or DESC
+    [<ties>]        -- Skip (default) or Dense
+)
+
+"
+Example:
+
+Product Rank =
+RANKX(
+    ALL(Product),
+    SUM(Sales[Revenue]),
+    ,
+    DESC,
+    DENSE
+)
+
+
+Scenario: Rank products by revenue to show top performers in a report.
+
+Key Points:
+Returns 1, 2, 3…
+Can handle ties (Dense/Skip)
+Works well for sorting visuals
+
+2 TOPN
+-----------------------------------------------------------------------------------------------------------
+Purpose: Returns a table of the top N items based on a measure. Useful for showing top performers directly.
+
+Syntax:
+"
+TOPN(
+    <n>,           -- Number of items to return
+    <table>,       -- Table to rank
+    <expression>,  -- Measure or column to rank by
+    [<order>]      -- ASC or DESC
+)
+"
+
+Example:
+
+Top 3 Products =
+TOPN(
+    3,
+    Product,
+    SUM(Sales[Revenue]),
+    DESC
+)
+
+
+Scenario: Display top 3 products by revenue in a table visual or calculate total revenue of top products.
+
+Key Points:
+Returns a subset of the table
+Can be used in CALCULATE to sum top N
+Useful for highlighting top items in visuals
+
+Summary Comparison:
+-----------------------------------------------------------------------------------------------------------
+RANKX → gives position number
+
+TOPN → gives actual top N rows
