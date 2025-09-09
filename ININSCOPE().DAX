@@ -1,0 +1,48 @@
+ISINSCOPE() DAX:
+--------------------------------------------------------------------------------
+1️⃣ Purpose
+--------------------------
+Checks whether a column is currently being used in a visual hierarchy 
+(like rows in a table or matrix) at the current level of evaluation.
+
+Returns TRUE/FALSE.
+
+2️⃣ Syntax
+--------------------------
+ISINSCOPE(<ColumnName>)
+
+<ColumnName> → The column you want to check if it’s in the current visual/row context.
+
+3️⃣ Key Points
+--------------------------
+Mostly used in matrix visuals to detect drill-down levels.
+Helps customize calculations depending on hierarchy level.
+Often combined with IF() for dynamic measures.
+
+Example (Retail Scenario)
+
+Data:
+Category, SubCategory, SalesAmount
+
+Measure:
+
+Sales Display =
+IF(
+    ISINSCOPE(Product[SubCategory]),
+    SUM(Sales[SalesAmount]),       -- Show sales at SubCategory level
+    SUMX(
+        VALUES(Product[Category]),
+        SUM(Sales[SalesAmount])    -- Aggregate for Category if not at SubCategory level
+    )
+)
+
+
+Behavior:
+If the matrix is drilled down to SubCategory, it shows SubCategory sales.
+If at Category level, it sums all SubCategories under that category.
+
+5️⃣ Use Cases
+--------------------------
+Dynamic measures in hierarchy visuals (Category → SubCategory → Product).
+Custom labels or formatting depending on drill level.
+Conditional calculations for parent vs child levels in a matrix
