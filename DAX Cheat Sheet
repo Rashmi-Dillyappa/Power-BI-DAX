@@ -1,0 +1,168 @@
+1️⃣ Table Functions
+----------------------------------------------------------
+1.FILTER(): Returns a table filtered by a condition.
+Example: FILTER(Sales, Sales[Qty] > 10)
+Scenario: Calculate revenue for high-quantity orders.
+
+2.ALL(): Ignores filters on a table or column.
+Example: CALCULATE(SUM(Sales[Revenue]), ALL(Sales))
+Scenario: Total revenue ignoring current report filters.
+
+3.VALUES(): Returns distinct values of a column.
+Example: VALUES(Product[Category])
+Scenario: List unique product categories.
+
+4.RELATEDTABLE(): Returns related rows from another table.
+Example: RELATEDTABLE(Sales) in Customer table
+Scenario: Fetch all sales for a specific customer.
+
+2️⃣ Time Intelligence Functions
+----------------------------------------------------------
+TOTALYTD(): Year-to-date total.
+Example: TOTALYTD(SUM(Sales[Revenue]), Dates[Date])
+Scenario: Cumulative revenue for the year.
+
+TOTALMTD(): Month-to-date total.
+Example: TOTALMTD(SUM(Sales[Revenue]), Dates[Date])
+Scenario: Revenue from start of month to today.
+
+TOTALQTD(): Quarter-to-date total.
+Example: TOTALQTD(SUM(Sales[Revenue]), Dates[Date])
+Scenario: Quarterly cumulative revenue.
+
+DATEADD(): Shift dates by N interval.
+Example: CALCULATE(SUM(Sales[Revenue]), DATEADD(Dates[Date], -1, MONTH))
+Scenario: Previous month sales (same days).
+
+PARALLELPERIOD(): Shift dates ignoring day-level filter.
+Example: CALCULATE(SUM(Sales[Revenue]), PARALLELPERIOD(Dates[Date], -1, MONTH))
+Scenario: Compare entire previous month, ignoring current day filter.
+
+SAMEPERIODLASTYEAR(): Shift dates exactly one year back.
+Example: CALCULATE(SUM(Sales[Revenue]), SAMEPERIODLASTYEAR(Dates[Date]))
+Scenario: YoY revenue comparison.
+
+DATESBETWEEN(): Filter dates between two dates.
+Example: DATESBETWEEN(Dates[Date], DATE(2025,1,1), DATE(2025,6,30))
+Scenario: Revenue from Jan to June.
+
+OPENINGBALANCE(): Get opening balance of period.
+Example: OPENINGBALANCE(Sales[Balance], Dates[Date])
+Scenario: Opening stock balance.
+
+CLOSINGBALANCE(): Get closing balance of period.
+Example: CLOSINGBALANCE(Sales[Balance], Dates[Date])
+Scenario: Closing stock balance.
+
+PREVIOUSMONTH(): Previous month total.
+Example: CALCULATE(SUM(Sales[Revenue]), PREVIOUSMONTH(Dates[Date]))
+Scenario: MTD comparison with last month.
+
+Running / Rolling Measures
+
+RUNNINGTOTAL (via CALCULATE + FILTER): Cumulative total.
+Example: CALCULATE(SUM(Sales[Revenue]), FILTER(ALL(Dates), Dates[Date] <= MAX(Dates[Date])))
+Scenario: Cumulative sales.
+
+7-day rolling avg: Smooth trend over 7 days.
+Example: CALCULATE(AVERAGE(Sales[Revenue]), DATESINPERIOD(Dates[Date], MAX(Dates[Date]), -7, DAY))
+Scenario: Daily moving average.
+
+3️⃣ Text Functions
+----------------------------------------------------------
+SEARCH(): Find text, returns position.
+Example: SEARCH("Tea", Product[Name], 1, 0)
+Scenario: Locate “Tea” in product names.
+
+FIND(): Similar to SEARCH but case-sensitive.
+Example: FIND("Tea", Product[Name])
+Scenario: Case-sensitive search.
+
+SUBSTITUTE(): Replace specific text.
+Example: SUBSTITUTE(Product[Name], "Tea", "Coffee")
+Scenario: Correct product names.
+
+REPLACE(): Replace text by position.
+Example: REPLACE(Product[Code], 1, 2, "XX")
+Scenario: Modify part of product code.
+
+4️⃣ Logical Functions
+----------------------------------------------------------
+IF(): Conditional logic.
+Example: IF(Sales[Qty]>10, "High", "Low")
+Scenario: Categorize order sizes.
+
+SWITCH(): Multiple conditions.
+Example: SWITCH(Product[Category], "A","High", "B","Medium", "Other")
+Scenario: Customer segmentation.
+
+AND(), OR(), NOT(): Combine logical conditions.
+Example: IF(AND(Sales[Qty]>10, Sales[Revenue]>1000), "Big Order","Small")
+Scenario: Advanced filtering.
+
+5️⃣ Mathematical & Statistical Functions
+----------------------------------------------------------
+SUM(): Sum of a column.
+Example: SUM(Sales[Revenue])
+Scenario: Total revenue.
+
+AVERAGE(): Average value.
+Example: AVERAGE(Sales[Revenue])
+Scenario: Average order value.
+
+COUNT(): Count rows.
+Example: COUNT(Sales[OrderID])
+Scenario: Total number of orders.
+
+RANKX(): Rank items.
+Example: RANKX(ALL(Product), SUM(Sales[Revenue]), , DESC)
+Scenario: Rank products by sales.
+
+DENSE_RANK(): Rank without gaps.
+Example: Using RANKX with tie-handling.
+Scenario: Rank products where ties get same rank.
+
+RANK.EQ(): Excel-like rank.
+Example: RANK.EQ(Sales[Revenue], Sales[Revenue], 0)
+Scenario: Similar to RANKX.
+
+6️⃣ Relationship & Lookup Functions
+----------------------------------------------------------
+RELATED(): Fetch value from related table.
+Example: RELATED(Customer[Name])
+Scenario: Get customer name in sales table.
+
+RELATEDTABLE(): Return related table rows.
+Example: RELATEDTABLE(Sales)
+Scenario: Fetch all sales for a customer.
+
+LOOKUPVALUE(): Lookup value by condition.
+Example: LOOKUPVALUE(Customer[Region], Customer[ID], Sales[CustomerID])
+Scenario: Map sales to customer region.
+
+7️⃣ Filter & Context Functions
+----------------------------------------------------------
+CALCULATE(): Change filter context.
+Example: CALCULATE(SUM(Sales[Revenue]), Product[Category]="Tea")
+Scenario: Total revenue for Tea category.
+
+CALCULATETABLE(): Returns table with modified filter.
+Example: CALCULATETABLE(Sales, Product[Category]="Tea")
+Scenario: Filtered sales table.
+
+HASONEVALUE(): Checks if only one value in context.
+Example: IF(HASONEVALUE(Product[Category]), "Yes","No")
+Scenario: Show detail only when one category selected.
+
+HASONEFILTER(): Checks if filter is applied.
+Example: IF(HASONEFILTER(Product[Category]), "Filtered","Not Filtered")
+Scenario: Conditional logic in visuals.
+
+ALLSELECTED(): Returns selected values ignoring some filters.
+Example: SUMX(ALLSELECTED(Product), Product[Price])
+Scenario: Dynamic calculations in visuals.
+
+ALLEXCEPT(): Removes filters except specified columns.
+Example: CALCULATE(SUM(Sales[Revenue]), ALLEXCEPT(Product, Product[Category]))
+Scenario: Total per category ignoring other filters.
+
