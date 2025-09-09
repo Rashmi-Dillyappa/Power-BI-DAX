@@ -1,0 +1,75 @@
+DAX – Table Joins
+------------------------------------------------------------------------------------
+RELATED()
+-------------------------------
+Join Type: Left Join
+Description: Fetch a single column value from a related table via relationship
+Example: RELATED(Customer[Name])
+
+RELATEDTABLE()
+-------------------------------
+Join Type: Inner Join
+Description: Returns all rows from a related table for each row in the current table
+Example: RELATEDTABLE(Sales) in Customer table
+
+LOOKUPVALUE()
+-------------------------------
+Join Type: Left Join
+Description: Find value from another table using a matching condition
+Example: LOOKUPVALUE(Customer[Region], Customer[ID], Sales[CustomerID])
+
+GENERATE()
+-------------------------------
+Join Type: Inner Join
+Description: Row-by-row “cross apply”, keeps only rows when second table returns values
+Example: GENERATE(Table1, Table2)
+
+GENERATEALL()
+-------------------------------
+Join Type: Left Join
+Description: Row-by-row “cross apply”, keeps all rows from first table
+Example: GENERATEALL(Table1, Table2)
+
+CROSSJOIN()
+-------------------------------
+Join Type: Cartesian
+Description: Returns all combinations of rows from two tables
+Example: CROSSJOIN(Product, Customer)
+
+Power BI Relationships (Model Layer) – Point-wise
+-------------------------------
+One-to-Many (1:*)
+-------------------------------
+Description: One row in parent matches many in child
+Use Case: Customer → Sales
+
+Many-to-One (*:1)
+-------------------------------
+Description: Opposite of One-to-Many
+Use Case: Sales → Customer
+
+Many-to-Many (:)
+-------------------------------
+Description: Both tables have multiple matches
+Use Case: Tag tables, complex filters
+
+Single Direction
+-------------------------------
+Description: Filter flows only one way
+Use Case: Prevent circular filter issues
+
+Both Directions
+-------------------------------
+Description: Filter flows both ways
+Use Case: Needed for some DAX calculations
+
+Inactive Relationship
+-------------------------------
+Description: Exists but not used by default
+Use Case: Activate temporarily using USERELATIONSHIP() in DAX
+
+Summary:
+-------------------------------
+Power Query: Classic SQL-style joins (Inner, Left, Right, Full, Anti).
+DAX: Functions mimic joins at row/table level (RELATED, RELATEDTABLE, LOOKUPVALUE, GENERATE, GENERATEALL, CROSSJOIN).
+Relationships: Model-level joins that allow DAX to traverse tables efficiently.
